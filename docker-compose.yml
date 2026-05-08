@@ -1,0 +1,15 @@
+# docker-compose.yml
+version: "3.8"
+services:
+  mongo:
+    image: mongo:7
+    container_name: streamsphere-ai-mongo
+    ports:
+      - "27018:27017"        # 27018 so it doesn't clash with your main project
+    environment:
+      MONGO_INITDB_DATABASE: streamsphere_ai
+    volumes:
+      - mongo_ai_data:/data/db
+
+volumes:
+  mongo_ai_data:
