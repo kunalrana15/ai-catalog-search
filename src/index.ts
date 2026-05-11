@@ -1,16 +1,48 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
+
+import connectDB from "./config/db.js";
+import { requestLogger } from "./middlewares/requestLogger.js";
 
 dotenv.config();
 
 const app = express();
-app.use(express.json());
-app.get("/health", (_, res) => res.json({ ok: true }));
 
-mongoose.connect(process.env.MONGO_URI!).then(() => {
-  console.log("✅ MongoDB connected");
-  app.listen(process.env.PORT ?? 4000, () =>
-    console.log(`🚀 Server running on port ${process.env.PORT ?? 4000}`)
-  );
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(express.json());
+app.use(requestLogger);
+
+// Health Route
+app.get("/health", (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is running",
+  });
 });
+
+// Root Route
+app.get("/", (_req, res) => {
+  res.json({
+    message: "AI Catalog Search API",
+  });
+});
+
+// Start Server
+const startServer = async () => {
+  try {
+    // Connect MongoDB
+    await connectDB();
+
+    // Start Express Server
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
