@@ -1,8 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
-
+import { errorHandler } from "./middlewares/errorHandler.js";
 import connectDB from "./config/db.js";
 import { requestLogger } from "./middlewares/requestLogger.js";
+import routes from "./routes/index.js";
 
 dotenv.config();
 
@@ -13,21 +14,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(requestLogger);
+app.use('/api/v1',routes);
+app.use(errorHandler);
 
-// Health Route
-app.get("/health", (_req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Server is running",
-  });
-});
-
-// Root Route
-app.get("/", (_req, res) => {
-  res.json({
-    message: "AI Catalog Search API",
-  });
-});
 
 // Start Server
 const startServer = async () => {
