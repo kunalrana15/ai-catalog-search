@@ -22,4 +22,24 @@ export class TitleController {
         }
     }
 
+    async search(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            // fetch the query from the req body 
+            const query = req.body.query as string;
+            // pass the query to the service layer
+            const results = await titleservice.search(query);
+
+            return res.json({
+                success: true,
+                data: results
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
