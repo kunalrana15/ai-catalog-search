@@ -1,14 +1,5 @@
-export interface AIQueryResponse {
-    tool: string,
 
-    filters: {
-        genres?: string[];
-        releaseYear?: {
-            $gt?: number;
-            $lt?: number;
-        };
-        isLive?: boolean;
-        language?: string;
-        type?: 'movie' | 'series';
-    }
-}
+import { z } from 'zod';
+import { SearchTitleSchema } from './query.schema.js';
+
+export type AIQueryResponse = z.infer<typeof SearchTitleSchema>;
