@@ -13,7 +13,7 @@ export async function generateQuery (userQuery: string) {
         `;
 
         const response = await geminiModel.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-3.1-flash-lite",
             contents: finalPrompt
         });
 
